@@ -5,3 +5,5 @@ dump
 *.hxproj
 .unittest
 .libs
+.DS_Store
+*/.DS_Store
