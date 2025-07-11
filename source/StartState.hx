@@ -37,6 +37,9 @@ class StartState extends FlxState
 		}
 		
 		if (FlxG.keys.justPressed.ANY && !escaped) 
-			FlxG.switchState(MenuState.new);
+		{
+			escaped = true;
+			FlxTween.tween(enterText, {alpha: 0}, 0.5, {onComplete: (_) -> FlxG.switchState(menu.MenuState.new)});
+		}
 	}
 }
