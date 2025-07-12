@@ -19,7 +19,7 @@
 	<window fps="60" background="#00000000" hardware="true" vsync="false" />
 
 	<!--Desktop-specific-->
-	<window if="desktop" orientation="landscape" fullscreen="false" resizable="false" width="1280" height="720" />
+	<window if="desktop" orientation="landscape" fullscreen="false" resizable="false" width="1600" height="900" />
 
 	<!-- _____________________________ Path Settings ____________________________ -->
 

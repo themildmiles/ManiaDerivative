@@ -3,6 +3,7 @@ package menu;
 import backend.Utilities.ChartPreview;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import haxe.Json;
+import states.PlayState;
 import sys.FileSystem;
 
 class SongSelectState extends FlxState {
@@ -46,7 +47,7 @@ class SongSelectState extends FlxState {
                             trace('$path: Chart has no song file');
 
                         songs.push({
-                            path: 'assets/data/charts/$path',
+							path: 'assets/data/charts/$path/',
                             title: chartData.title,
                             artist: chartData.artist,
                             difficulty: chartData.difficulty,
@@ -95,7 +96,8 @@ class SongSelectState extends FlxState {
 			songIndex = (songIndex + 1) % songs.length;
 		else if (FlxG.keys.justPressed.ENTER)
 		{
-            // fuck is this
+			PlayState.loadChart(songs[songIndex]);
+			FlxG.switchState(PlayState.new);
 		}
 
         for (SI in 0...songs.length)
