@@ -165,7 +165,7 @@ class PlayState extends FlxState
 			scoreTxt.text = Std.string(Math.floor(displayedScore)).lpad("0", 8);
 			comboTxt.text = Std.string(scoreObj.combo);
 			comboTxt.size = 60;
-			accuracyTxt.text = '${Utilities.truncateFloat(scoreObj.accuracy, 2)}%';
+			accuracyTxt.text = '${Utilities.truncateFloat(Math.isNaN(scoreObj.accuracy) ? 100 : scoreObj.accuracy, 2)}%';
 		}
 		else
 		{
@@ -175,7 +175,20 @@ class PlayState extends FlxState
 			if (FlxG.keys.anyJustPressed([FlxKey.D, FlxKey.F, FlxKey.J, FlxKey.K]))
 			{
 				music.play(true, chartLoaded.crochet * -4);
-				music.onComplete = () -> musicDone = true;
+				music.onComplete = () ->
+				{
+					musicDone = true;
+					var flash = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+					add(flash);
+					flash.alpha = 0;
+					FlxTween.tween(flash, {alpha: 1}, 0.4, {
+						onComplete: t ->
+						{
+							EndScreenState.loadGameData(scoreObj, chartLoaded);
+							FlxG.switchState(EndScreenState.new);
+						}
+					});
+				}
 			}
 		}
 	}
@@ -266,4 +279,5 @@ class PlayState extends FlxState
 
 		NoteDatas.unspawnedNotes = NoteDatas.chartLoaded.notes; // NOT supposed to be added yet
     }
+	override function onFocusLost() {}
 }
