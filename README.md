@@ -20,4 +20,8 @@ Checklist:
   * [x] Show judgement
   * [x] Hit error meter
   * [ ] End screen
+    * [x] Display score
+    * [x] Display accuracy with judgements
+    * [ ] Show early/late
+    * [ ] A chart of hit timing
   * [ ] Background with dim
