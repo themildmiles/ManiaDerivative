@@ -36,7 +36,7 @@ class EndScreenState extends FlxState {
 		GameDatas.destroy();
 
 		var chartTxt:FlxText = new FlxText(0, 40, 0, '${chartLoaded.title}\n${chartLoaded.difficulty}\n${chartLoaded.artist}');
-		chartTxt.setFormat(AssetPaths.font("Oswald-Regular.ttf"), 40, FlxColor.WHITE, CENTER, OUTLINE);
+		chartTxt.setFormat(AssetPaths.font("Oswald-Regular.ttf"), 40, FlxColor.WHITE, LEFT, OUTLINE);
 		add(chartTxt);
 
 		scoreTxt = new FlxText(0, 40, FlxG.width, "00000000");
