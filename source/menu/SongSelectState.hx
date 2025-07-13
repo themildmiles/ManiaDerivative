@@ -53,7 +53,7 @@ class SongSelectState extends FlxState {
                             difficulty: chartData.difficulty,
                             songFile: songPath,
                             chartData: chartData,
-                            audioPreview: if (songPath != null) new FlxSound().loadEmbedded(songPath, true) else null
+							audioPreview: if (songPath != null) FlxG.sound.load('assets/data/charts/$path/$songPath') else null
                         });
                     }
                     catch(error:haxe.Exception)

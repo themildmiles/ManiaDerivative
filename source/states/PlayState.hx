@@ -25,7 +25,7 @@ class PlayState extends FlxState
     var chartLoaded:Chart;
 
 	// yes.
-	var autoplay:Bool = true;
+	var autoplay:Bool = false;
 
     // lol
     var unspawnedNotes:Array<Note>;
@@ -144,7 +144,7 @@ class PlayState extends FlxState
 			}
 
 			var timeDiff:Float = music.time - note.hitTime;
-			if (timeDiff > 140)
+			if (timeDiff > 140 && !note.hit)
 				registerMiss(note);
 
 			if (note.hit)
@@ -219,8 +219,8 @@ class PlayState extends FlxState
 	{
 		var judgeType:Int = 0;
 		var timeDiff:Float = music.time - note.hitTime;
-		// if (autoplay)
-		// 	timeDiff = 0;
+		if (autoplay)
+			timeDiff = 0;
 
 		if (Math.abs(timeDiff) > 25)
 			judgeType = 1;

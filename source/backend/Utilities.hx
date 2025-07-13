@@ -129,6 +129,11 @@ class Score
 	**/
 	public var accuracyReal(get, never):Float;
 
+	/**
+		The rank.
+	**/
+	public var rank(get, never):String;
+
 	public function new(amtOfNotes:Int)
 	{
 		this.amtOfNotes = amtOfNotes;
@@ -197,4 +202,30 @@ class Score
 	{
 		return (accuracyHit / accuracyCurrentTotal) * 100;
     }
+	function get_rank():String
+	{
+		var accuracyReal:Float = accuracyReal / 100;
+		var accuracy:Float = accuracy / 100;
+		if (accuracyReal == 1)
+			return "SSS";
+		if (accuracy == 1)
+			return "SS+";
+		if (accuracy >= 0.9975)
+			return "SS";
+		if (accuracy >= 0.995)
+			return "SS-";
+		if (accuracy >= 0.99)
+			return "S+";
+		if (accuracy >= 0.98)
+			return "S";
+		if (accuracy >= 0.95)
+			return "A+";
+		if (accuracy >= 0.9)
+			return "A";
+		if (accuracy >= 0.85)
+			return "B";
+		if (accuracy >= 0.8)
+			return "C";
+		return "F";
+	}
 }

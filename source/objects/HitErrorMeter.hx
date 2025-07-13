@@ -22,11 +22,11 @@ class HitErrorMeter extends FlxSpriteGroup {
         bar.scale.x = 120 / 140;
         add(bar);
         
-        bar = new FlxSprite(15,20).makeGraphic(Std.int(width - 30), 10, 0xFF80FF00);
+		bar = new FlxSprite(15, 20).makeGraphic(Std.int(width - 30), 10, 0xFF00FF00);
         bar.scale.x = 85 / 140;
         add(bar);
         
-        bar = new FlxSprite(15,20).makeGraphic(Std.int(width - 30), 10, 0xFF00FFC8);
+		bar = new FlxSprite(15, 20).makeGraphic(Std.int(width - 30), 10, 0xFF00D9FF);
         bar.scale.x = 50 / 140;
         add(bar);
 
@@ -43,8 +43,8 @@ class HitErrorMeter extends FlxSpriteGroup {
             errorSprite = new FlxSprite(errorWidth / 2 + (errorWidth / 2 - 15) * (noteDev / 140) - 2.5, 0).loadGraphic(errorGraphic);
             errorSprite.color = switch(judgeType) {
                 case 0: 0xFFFFFFFF;
-                case 1: 0xFF00FFFF;
-                case 2: 0xFF00FFC8;
+				case 1: 0xFF00D9FF;
+				case 2: 0xFF00FF00;
                 case 3: 0xFF2020FF;
                 case 4: 0xFF7F00FF;
                 default: 0xFFFFFFFF;
