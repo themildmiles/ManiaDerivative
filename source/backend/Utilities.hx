@@ -14,7 +14,7 @@ class Utilities
 		trace(result); // 123.4
 		```
 	**/
-	public static function truncateFloat(m:Float, n:Int)
+	inline public static function truncateFloat(m:Float, n:Int)
 		return Math.floor(m * Math.pow(10, n)) / Math.pow(10, n);
 }
 

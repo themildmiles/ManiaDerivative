@@ -21,6 +21,6 @@ class Note extends FlxSprite {
         for the note failed to load, calling `makeGraphic()`
         to create a 75x10 white rectangle.
     **/
-    function loadFallbackGraphic():FlxSprite
+	inline function loadFallbackGraphic():FlxSprite
 		return makeGraphic(125, 30, FlxColor.WHITE);
 }

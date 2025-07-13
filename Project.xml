@@ -16,7 +16,7 @@
 	<!-- ____________________________ Window Settings ___________________________ -->
 
 	<!--These window settings apply to all targets-->
-	<window fps="60" background="#00000000" hardware="true" vsync="false" />
+	<window fps="144" background="#00000000" hardware="true" vsync="false" />
 
 	<!--Desktop-specific-->
 	<window if="desktop" orientation="landscape" fullscreen="false" resizable="false" width="1600" height="900" />
@@ -41,9 +41,6 @@
 	<!--<haxelib name="nape-haxe4" />-->
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
-
-	<!--Remove the legacy health system-->
-	<haxedef name="FLX_NO_HEALTH" />
 	
 	<!--Enable the Flixel core recording system-->
 	<!--<haxedef name="FLX_RECORD" />-->

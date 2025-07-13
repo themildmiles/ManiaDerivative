@@ -1,6 +1,9 @@
 package states;
 
+import flixel.graphics.FlxGraphic;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.input.keyboard.FlxKey;
+import objects.HitErrorMeter;
 import objects.Note;
 
 using StringTools;
@@ -10,6 +13,11 @@ private class NoteDatas
 {
 	static public var chartLoaded:Chart;
 	static public var unspawnedNotes:Array<Note>;
+	static public function destroy()
+	{
+		chartLoaded = null;
+		unspawnedNotes = null;
+	}
 }
 
 class PlayState extends FlxState
@@ -17,7 +25,7 @@ class PlayState extends FlxState
     var chartLoaded:Chart;
 
 	// yes.
-	var autoplay:Bool = false;
+	var autoplay:Bool = true;
 
     // lol
     var unspawnedNotes:Array<Note>;
@@ -29,8 +37,13 @@ class PlayState extends FlxState
 	var scoreTxt:FlxText;
 	var comboTxt:FlxText;
 	var accuracyTxt:FlxText;
+	var hitErrorMeter:HitErrorMeter;
+
+	var judgementSprite:FlxSprite;
+	var judgementGraphics:Array<FlxGraphic>;
 
 	var music:FlxSound;
+	var musicDone:Bool = false;
 
     override public function create() {
 		trace("Create!!");
@@ -39,9 +52,10 @@ class PlayState extends FlxState
 		chartLoaded = NoteDatas.chartLoaded;
 		unspawnedNotes = NoteDatas.unspawnedNotes;
 
+		NoteDatas.destroy();
+
 		trace("Load music file");
 		music = FlxG.sound.load(chartLoaded.songFile);
-		music.play(true, chartLoaded.crochet * -4);
 
 		trace("Init score!");
 		scoreObj = new Score(unspawnedNotes.length);
@@ -63,6 +77,10 @@ class PlayState extends FlxState
 		notes = new FlxTypedGroup<Note>();
 		add(notes);
 
+		judgementSprite = new FlxSprite(0, 200);
+		judgementSprite.antialiasing = true;
+		add(judgementSprite);
+
 		scoreTxt = new FlxText(0, 0, 0, "00000000");
 		scoreTxt.setFormat(AssetPaths.font("Oswald-Regular.ttf"), 40, FlxColor.WHITE, LEFT, OUTLINE);
 		add(scoreTxt);
@@ -75,8 +93,12 @@ class PlayState extends FlxState
 		comboTxt.setFormat(AssetPaths.font("Oswald-Regular.ttf"), 60, FlxColor.WHITE, CENTER, OUTLINE);
 		add(comboTxt);
 		comboTxt.antialiasing = true;
+		hitErrorMeter = new HitErrorMeter(-FlxG.height / 2 + 90, 350);
+		add(hitErrorMeter);
     }
 
+	var displayedScore:Float = 0;
+	var toRemove:Array<Note> = []; // optimize
     override public function update(elapsed:Float) {
         super.update(elapsed);
 		// trace(music.time);
@@ -94,23 +116,27 @@ class PlayState extends FlxState
 			}
 		}
 
-		var toRemove:Array<Note> = [];
+		toRemove.resize(0);
 		var judgmentLine = FlxG.height - 180;
 
-		if (FlxG.keys.justPressed.D)
-			checkLane(0);
-		if (FlxG.keys.justPressed.F)
-			checkLane(1);
-		if (FlxG.keys.justPressed.J)
-			checkLane(2);
-		if (FlxG.keys.justPressed.K)
-			checkLane(3);
+		if (!autoplay)
+		{
+			if (FlxG.keys.justPressed.D)
+				checkLane(0);
+			if (FlxG.keys.justPressed.F)
+				checkLane(1);
+			if (FlxG.keys.justPressed.J)
+				checkLane(2);
+			if (FlxG.keys.justPressed.K)
+				checkLane(3);
+		}
 
+		var centerX = FlxG.width / 2;
 		notes.forEach((note) ->
 		{
 			note.y = ((music.time - note.hitTime) / 750 * FlxG.height) + judgmentLine;
 
-			note.x = FlxG.width / 2 + 125 * (note.column - 2);
+			note.x = centerX + 125 * (note.column - 2);
 
 			if (music.time > note.hitTime && autoplay)
 			{
@@ -125,22 +151,38 @@ class PlayState extends FlxState
 				toRemove.push(note);
 		});
 
-		laneHit.forEach((note) -> note.alpha -= (note.alpha - 0.5) * 0.05);
+		laneHit.forEach((note) -> note.alpha -= (note.alpha - 0.2) * 0.075);
 
 		for (note in toRemove)
 		{
 			note.destroy();
-			notes.remove(note);
+			notes.remove(note, true);
 		}
 
-		scoreTxt.text = Std.string(Math.floor(scoreObj.score)).lpad("0", 8);
-		comboTxt.text = Std.string(scoreObj.combo);
-		accuracyTxt.text = '${Utilities.truncateFloat(scoreObj.accuracy, 2)}%\n${Utilities.truncateFloat(scoreObj.accuracyReal, 2)}%';
+		if (music.playing || musicDone)
+		{
+			displayedScore += (scoreObj.score - displayedScore) * 0.2;
+			scoreTxt.text = Std.string(Math.floor(displayedScore)).lpad("0", 8);
+			comboTxt.text = Std.string(scoreObj.combo);
+			comboTxt.size = 60;
+			accuracyTxt.text = '${Utilities.truncateFloat(scoreObj.accuracy, 2)}%';
+		}
+		else
+		{
+			comboTxt.text = "Press any key to begin";
+			comboTxt.size = 30;
+
+			if (FlxG.keys.anyJustPressed([FlxKey.D, FlxKey.F, FlxKey.J, FlxKey.K]))
+			{
+				music.play(true, chartLoaded.crochet * -4);
+				music.onComplete = () -> musicDone = true;
+			}
+		}
 	}
 
-	function checkLane(lane:Int)
+	inline function checkLane(lane:Int)
 	{
-		laneHit.members[lane].alpha = 0.75;
+		laneHit.members[lane].alpha = 0.9;
 		var actuallyHit:Bool = false;
 		notes.forEachAlive((note) ->
 		{
@@ -158,11 +200,14 @@ class PlayState extends FlxState
 	}
 
 	var comboPop:Null<FlxTween> = null;
+	var judgePop:Null<FlxTween> = null;
 
 	function registerHit(note:Note)
 	{
 		var judgeType:Int = 0;
 		var timeDiff:Float = music.time - note.hitTime;
+		// if (autoplay)
+		// 	timeDiff = 0;
 
 		if (Math.abs(timeDiff) > 25)
 			judgeType = 1;
@@ -180,16 +225,38 @@ class PlayState extends FlxState
 		{
 			comboTxt.scale.x *= 1.1;
 			comboTxt.scale.y *= 1.1;
-			if (comboPop != null)
+			if (comboPop != null && !comboPop.finished)
 				comboPop.cancel();
-			comboPop = FlxTween.tween(comboTxt.scale, {x: 1, y: 1}, 0.5, {ease: FlxEase.expoOut, onComplete: t -> comboPop = null});
+			comboPop = FlxTween.tween(comboTxt.scale, {x: 1, y: 1}, 0.5, {ease: FlxEase.expoOut});
 		}
+		popRating(judgeType);
+		hitErrorMeter.registerError(timeDiff, judgeType);
+	}
+
+	inline function popRating(judgeType:Int)
+	{
+		judgementSprite.loadGraphic('assets/images/rating/$judgeType.png');
+		judgementSprite.x = FlxG.width / 2 - judgementSprite.width / 2;
+		judgementSprite.scale.set(2, 2);
+		judgementSprite.alpha = 1;
+		if (judgePop != null && !judgePop.finished)
+			judgePop.cancel();
+		judgePop = FlxTween.tween(judgementSprite.scale, {x: 1.5, y: 1.5}, 0.4, {
+			ease: FlxEase.expoOut,
+			onComplete: t ->
+			{
+				judgePop = FlxTween.tween(judgementSprite, {alpha: 0}, 0.2, {
+					ease: FlxEase.expoIn
+				});
+			}
+		});
 	}
 
 	function registerMiss(note:Note)
 	{
 		scoreObj.addHit(5);
 		note.hit = true;
+		popRating(5);
 	}
 
 	static public function loadChart(chartData:ChartPreview)
