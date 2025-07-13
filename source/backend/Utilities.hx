@@ -140,7 +140,7 @@ class Score
 		this.judgementCounter = [0, 0, 0, 0, 0, 0];
 		for (i in 0...amtOfNotes)
 		{
-			maxScoringCombo += Math.pow(1.002, Math.pow(i, 0.9)) - 1;
+			maxScoringCombo += Math.pow(1.002, Math.pow(i + 1, 0.9)) - 1;
 		}
 	}
 
