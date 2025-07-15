@@ -5,8 +5,8 @@ An alternative to mania??? Not really aiming for that.
 Checklist:
 * [ ] Main menu
   * [ ] Options menu
-    * [ ] Offset adjustment
-    * [ ] Note speed adjustment
+    * [x] Offset adjustment
+    * [x] Note speed adjustment
     * [ ] Controls
   * [ ] Song select
     * [x] List charts
