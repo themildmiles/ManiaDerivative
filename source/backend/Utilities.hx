@@ -1,5 +1,6 @@
 package backend;
 
+import backend.OptionsData.Options;
 import objects.Note;
 
 /**
@@ -81,16 +82,18 @@ class Chart {
 		if (chartData.chartData.version < 2)
 		{
 			for (noteData in chartNotes)
-				this.notes.push(new Note(noteData.beat, this.crochet * (noteData.beat[0] + noteData.beat[1] / noteData.beat[2]) + chartData.chartData.offset,
+				this.notes.push(new Note(noteData.beat,
+					this.crochet * (noteData.beat[0] + noteData.beat[1] / noteData.beat[2]) + Options.options.offset + chartData.chartData.offset,
 					noteData.column));
 			this.offset = chartData.chartData.offset;
 		}
 		else
 		{
 			for (noteData in chartNotes)
-				this.notes.push(new Note(noteData.beat, this.crochet * (noteData.beat[0] + noteData.beat[1] / noteData.beat[2]) + chartData.chartData.offset,
+				this.notes.push(new Note(noteData.beat,
+					this.crochet * (noteData.beat[0] + noteData.beat[1] / noteData.beat[2]) + Options.options.offset + chartData.chartData.offset,
 					noteData.column));
-			this.offset = chartData.chartData.offset;
+			this.offset = -chartData.chartData.offset;
 		}
 	}
 

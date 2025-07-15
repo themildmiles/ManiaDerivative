@@ -1,5 +1,7 @@
 package;
 
+import backend.OptionsData;
+
 class StartState extends FlxState
 {
 	var titleText:FlxText;
@@ -9,6 +11,7 @@ class StartState extends FlxState
 	
 	override public function create()
 	{
+		Options.load();
 		super.create();
 
 		titleText = new FlxText(0, 100, FlxG.width, "ManiaDerivative", 120);

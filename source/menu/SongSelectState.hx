@@ -105,7 +105,10 @@ class SongSelectState extends FlxState {
             var songText:FlxText = songsText.members[SI];
 
             songText.y = 300 + (SI - songIndex) * 40;
-            songText.alpha = Math.max(0, 1 - Math.abs(SI - songIndex) * 0.2);
+			if (songIndex > SI)
+				songText.alpha = Math.max(0, 1 - Math.abs(SI - songIndex) * 0.33);
+			else
+				songText.alpha = Math.max(0, 1 - Math.abs(SI - songIndex) * 0.1);
 
             if (songs[SI].audioPreview != null)
                 if(SI == songIndex)
@@ -113,5 +116,7 @@ class SongSelectState extends FlxState {
                 else 
                     songs[SI].audioPreview.pause();
         }
+		if (FlxG.keys.justPressed.ESCAPE)
+			FlxG.switchState(MenuState.new);
     }
 }

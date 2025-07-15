@@ -1,8 +1,10 @@
 package states;
 
+import backend.OptionsData.Options;
 import flixel.graphics.FlxGraphic;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.input.keyboard.FlxKey;
+import haxe.ds.Option;
 import objects.HitErrorMeter;
 import objects.Note;
 
@@ -79,6 +81,7 @@ class PlayState extends FlxState
 
 		judgementSprite = new FlxSprite(0, 200);
 		judgementSprite.antialiasing = true;
+		judgementSprite.alpha = 0;
 		add(judgementSprite);
 
 		scoreTxt = new FlxText(0, 0, 0, "00000000");
@@ -93,7 +96,7 @@ class PlayState extends FlxState
 		comboTxt.setFormat(AssetPaths.font("Oswald-Regular.ttf"), 60, FlxColor.WHITE, CENTER, OUTLINE);
 		add(comboTxt);
 		comboTxt.antialiasing = true;
-		hitErrorMeter = new HitErrorMeter(-FlxG.height / 2 + 90, 350);
+		hitErrorMeter = new HitErrorMeter(-FlxG.height / 2 + 90, 300);
 		add(hitErrorMeter);
     }
 
@@ -134,7 +137,7 @@ class PlayState extends FlxState
 		var centerX = FlxG.width / 2;
 		notes.forEach((note) ->
 		{
-			note.y = ((music.time - note.hitTime) / 750 * FlxG.height) + judgmentLine;
+			note.y = ((music.time - note.hitTime) / 750 * FlxG.height * (Options.options.noteSpeed / 15)) + judgmentLine;
 
 			note.x = centerX + 125 * (note.column - 2);
 
@@ -162,7 +165,7 @@ class PlayState extends FlxState
 		if (music.playing || musicDone)
 		{
 			displayedScore += (scoreObj.score - displayedScore) * 0.2;
-			scoreTxt.text = Std.string(Math.floor(displayedScore)).lpad("0", 8);
+			scoreTxt.text = Std.string(Math.round(displayedScore)).lpad("0", 8);
 			comboTxt.text = Std.string(scoreObj.combo);
 			comboTxt.size = 60;
 			accuracyTxt.text = '${Utilities.truncateFloat(Math.isNaN(scoreObj.accuracy) ? 100 : scoreObj.accuracy, 2)}%';
@@ -242,7 +245,8 @@ class PlayState extends FlxState
 				comboPop.cancel();
 			comboPop = FlxTween.tween(comboTxt.scale, {x: 1, y: 1}, 0.5, {ease: FlxEase.expoOut});
 		}
-		popRating(judgeType);
+		if (judgeType > Options.options.hideMode - 1)
+			popRating(judgeType);
 		hitErrorMeter.registerError(timeDiff, judgeType);
 	}
 

@@ -50,7 +50,7 @@ class MenuState extends FlxState
 					FlxG.switchState(SongSelectState.new);
 
 				case 1:
-					trace("Absolutely nothing happens.");
+					FlxG.switchState(OptionsState.new);
 
 				case 2:
 					trace("See you next time");
