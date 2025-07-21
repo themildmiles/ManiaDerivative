@@ -158,17 +158,17 @@ class Score
 		switch (type)
 		{
 			case 0: // MARVELOUS!!!
-				currentScoringCombo += Math.pow(1.002, Math.pow(maxCombo, 0.9)) - 1;
-				accuracyHit++;
+				currentScoringCombo += Math.pow(1.00201, Math.pow(maxCombo, 0.9)) - 1;
+				accuracyHit += 1.02;
 				shownAccuracyHit++;
 
 			case 1: // PERFECT!!
-				currentScoringCombo += Math.pow(1.002, Math.pow(maxCombo, 0.9)) - 1;
-				accuracyHit += 0.99;
+				currentScoringCombo += Math.pow(1.0020075, Math.pow(maxCombo, 0.9)) - 1;
+				accuracyHit++;
 				shownAccuracyHit++;
 
 			case 2: // GREAT!
-				currentScoringCombo += Math.pow(1.002, Math.pow(maxCombo, 0.9)) - 1;
+				currentScoringCombo += Math.pow(1.002005, Math.pow(maxCombo, 0.9)) - 1;
 				accuracyHit += 0.75;
 				shownAccuracyHit += 0.75;
 

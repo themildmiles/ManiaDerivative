@@ -27,7 +27,7 @@ class PlayState extends FlxState
     var chartLoaded:Chart;
 
 	// yes.
-	var autoplay:Bool = false;
+	var autoplay:Bool = #if debug true #else false #end;
 
     // lol
     var unspawnedNotes:Array<Note>;
