@@ -38,11 +38,7 @@ typedef ChartPreview =
 	/**
 		The chart data from the chart file. Do not adjust this in any circumstances.
 	**/
-    var chartData:Dynamic;
-	/**
-		...
-	**/
-    var audioPreview:Null<FlxSound>;
+	var chartData:Dynamic;
 }
 
 /**
@@ -116,6 +112,7 @@ class Score
 	var accuracyCurrentTotal:Int = 0;
 
 	public var judgementCounter:Array<Int>;
+	private var missCombo:Int = 0;
 
 	/**
 		From 0 to 10,000,000 heheh
@@ -136,6 +133,11 @@ class Score
 		The rank.
 	**/
 	public var rank(get, never):String;
+
+	/**
+		Health :P
+	**/
+	public var health:Float = 100;
 
 	public function new(amtOfNotes:Int)
 	{
@@ -161,22 +163,29 @@ class Score
 				currentScoringCombo += Math.pow(1.00201, Math.pow(maxCombo, 0.9)) - 1;
 				accuracyHit += 1.02;
 				shownAccuracyHit++;
+				health += 2;
+				missCombo = 0;
 
 			case 1: // PERFECT!!
 				currentScoringCombo += Math.pow(1.0020075, Math.pow(maxCombo, 0.9)) - 1;
 				accuracyHit++;
 				shownAccuracyHit++;
+				health += 1.75;
+				missCombo = 0;
 
 			case 2: // GREAT!
 				currentScoringCombo += Math.pow(1.002005, Math.pow(maxCombo, 0.9)) - 1;
 				accuracyHit += 0.75;
 				shownAccuracyHit += 0.75;
+				health += 1;
+				missCombo = 0;
 
 			case 3: // GOOD
 				combo--; // revert adding combo but not reset it
 				currentScoringCombo += Math.pow(1.002, Math.pow(maxCombo, 0.9)) - 1;
 				accuracyHit += 0.4;
 				shownAccuracyHit += 0.4;
+				missCombo = 0;
 
 			case 4: // BAD
 				combo = 0;
@@ -184,9 +193,15 @@ class Score
 				accuracyHit += 0.1;
 				shownAccuracyHit += 0.1;
 
+				health -= 5 * Math.pow(1.05, missCombo / 2);
+
 			case 5: // MISS!
 				combo = 0;
+				missCombo++;
+				health -= 10 * Math.pow(1.1, (missCombo - 1) / 3);
 		}
+
+		health = Math.min(health, 100);
 
 		judgementCounter[type]++;
 	}
@@ -205,6 +220,7 @@ class Score
 	{
 		return (accuracyHit / accuracyCurrentTotal) * 100;
     }
+
 	function get_rank():String
 	{
 		var accuracyReal:Float = accuracyReal / 100;

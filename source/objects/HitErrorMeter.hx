@@ -55,7 +55,7 @@ class HitErrorMeter extends FlxSpriteGroup {
             };
 			errorSprite.blend = BlendMode.ADD;
             
-            FlxTween.tween(errorSprite, {alpha: 0}, 1, {startDelay: 1, ease: FlxEase.expoIn, onComplete: T -> remove(errorSprite).destroy()});
+			FlxTween.tween(errorSprite, {alpha: 0}, 1, {startDelay: 3, onComplete: T -> remove(errorSprite).destroy()});
 
             add(errorSprite);
         }

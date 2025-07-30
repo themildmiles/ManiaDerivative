@@ -3,6 +3,7 @@ package states;
 import backend.OptionsData.Options;
 import flixel.graphics.FlxGraphic;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.input.actions.FlxAction.FlxActionAnalog;
 import flixel.input.keyboard.FlxKey;
 import haxe.ds.Option;
 import objects.HitErrorMeter;
@@ -43,9 +44,13 @@ class PlayState extends FlxState
 
 	var judgementSprite:FlxSprite;
 	var judgementGraphics:Array<FlxGraphic>;
+	var healthBar:FlxSprite;
 
 	var music:FlxSound;
 	var musicDone:Bool = false;
+
+	// temporary :D
+	var _tempHealth:Float = 0;
 
     override public function create() {
 		trace("Create!!");
@@ -76,8 +81,17 @@ class PlayState extends FlxState
 			laneHit.add(note);
 		}
 
+		healthBar = new FlxSprite(FlxG.width / 2 - 350);
+		healthBar.loadGraphic(FlxG.bitmap.add("assets/images/healthbar.png"));
+		healthBar.y = FlxG.height - healthBar.height - 20;
+		add(healthBar);
+
+		healthBar.clipRect = new FlxRect(0, 0, healthBar.width, healthBar.height);
+
 		notes = new FlxTypedGroup<Note>();
 		add(notes);
+
+		autoplay = Options.options.autoplay;
 
 		judgementSprite = new FlxSprite(0, 200);
 		judgementSprite.antialiasing = true;
@@ -104,6 +118,11 @@ class PlayState extends FlxState
 	var toRemove:Array<Note> = []; // optimize
     override public function update(elapsed:Float) {
         super.update(elapsed);
+		_tempHealth += (scoreObj.health - _tempHealth) * 0.05;
+
+		healthBar.clipRect.y = -(healthBar.height * _tempHealth / 100) + healthBar.height;
+		healthBar.clipRect = healthBar.clipRect; // haxe-kun why
+
 		// trace(music.time);
 		while (unspawnedNotes.length > 0)
 		{
@@ -115,7 +134,7 @@ class PlayState extends FlxState
 			}
 			else
 			{
-				break; // remaining notes are too far in the future
+				break; // prevent lag
 			}
 		}
 

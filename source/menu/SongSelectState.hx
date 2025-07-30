@@ -52,8 +52,7 @@ class SongSelectState extends FlxState {
                             artist: chartData.artist,
                             difficulty: chartData.difficulty,
                             songFile: songPath,
-                            chartData: chartData,
-							audioPreview: if (songPath != null) FlxG.sound.load('assets/data/charts/$path/$songPath') else null
+							chartData: chartData
                         });
                     }
                     catch(error:haxe.Exception)
@@ -109,12 +108,6 @@ class SongSelectState extends FlxState {
 				songText.alpha = Math.max(0, 1 - Math.abs(SI - songIndex) * 0.33);
 			else
 				songText.alpha = Math.max(0, 1 - Math.abs(SI - songIndex) * 0.1);
-
-            if (songs[SI].audioPreview != null)
-                if(SI == songIndex)
-                    songs[SI].audioPreview.play(true);
-                else 
-                    songs[SI].audioPreview.pause();
         }
 		if (FlxG.keys.justPressed.ESCAPE)
 			FlxG.switchState(MenuState.new);

@@ -36,6 +36,14 @@ class OptionsState extends FlxState {
                 "Hide \"MARVELOUS!!!\" judgements",
                 "Hide \"PERFECT!!\" judgements"
             ]
+		},
+		{
+			name: "Autoplay",
+			desc: "Preview the chart. The computer will be playing.",
+			vb: "autoplay",
+			type: "bool",
+			ifTrue: "On",
+			ifFalse: "Off"
         }
     ];
     var optionIndex:Int = 0;
@@ -60,6 +68,9 @@ class OptionsState extends FlxState {
 
             if (option.type == "str")
                 optionText.text = '${option.name}: ${option.options[Reflect.field(Options.options, option.vb)]}';
+
+			if (option.type == "bool")
+				optionText.text = '${option.name}: ${Reflect.field(Options.options, option.vb) ? option.ifTrue : option.ifFalse}';
 
             optionTexts.add(optionText);
         }
@@ -93,6 +104,8 @@ class OptionsState extends FlxState {
                         vari = option.options.length-1;
 
                     Reflect.setField(Options.options, option.vb, vari);
+				case "bool":
+					Reflect.setField(Options.options, option.vb, !Reflect.field(Options.options, option.vb));
             }
         }
         else if (FlxG.keys.justPressed.RIGHT)
@@ -104,6 +117,8 @@ class OptionsState extends FlxState {
                 case "str":
                     var vari:Float = (Reflect.field(Options.options, option.vb) + 1) % option.options.length;
                     Reflect.setField(Options.options, option.vb, vari);
+				case "bool":
+					Reflect.setField(Options.options, option.vb, !Reflect.field(Options.options, option.vb));
             }
         }
 
@@ -115,6 +130,9 @@ class OptionsState extends FlxState {
             optionText.text = '${option.name}: ${Reflect.field(Options.options, option.vb)}';
             if (option.type == "str")
                 optionText.text = '${option.name}: ${option.options[Reflect.field(Options.options, option.vb)]}';
+
+			if (option.type == "bool")
+				optionText.text = '${option.name}: ${Reflect.field(Options.options, option.vb) ? option.ifTrue : option.ifFalse}';
 
             optionText.y = 300 + (OI - optionIndex) * 40;
             optionText.alpha = Math.max(0, 1 - Math.abs(OI - optionIndex) * 0.2);

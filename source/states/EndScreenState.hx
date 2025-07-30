@@ -69,7 +69,7 @@ class EndScreenState extends FlxState {
 			judgementTxt.alpha = 0;
 			judgementTxt.text = '${judgementNames[i]} - ${scoreObj.judgementCounter[i]}';
 
-			FlxTween.tween(judgementTxt, {x: FlxG.width / 2 - 300, alpha: 1}, 1, {ease: FlxEase.expoOut, startDelay: 1.25 + i * 0.3});
+			FlxTween.tween(judgementTxt, {x: FlxG.width / 2 - 300, alpha: 1}, 1, {ease: FlxEase.expoOut, startDelay: 0.75 + i * 0.1});
 		}
 
 		rankTxt = new FlxText(100, 400, FlxG.width, scoreObj.rank);
@@ -81,7 +81,7 @@ class EndScreenState extends FlxState {
 		rankTxt.alpha = 0;
 
 		FlxTween.tween(rankTxt, {'scale.x': 1, 'scale.y': 1, alpha: 1}, 1,
-			{ease: n -> Math.pow(n, 10 / 3), startDelay: 2.5, onComplete: t -> FlxG.camera.flash()});
+			{ease: n -> Math.pow(n, 10 / 3), startDelay: 1.5, onComplete: t -> FlxG.camera.flash()});
 
 		add(judgementTexts);
 
