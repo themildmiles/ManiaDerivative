@@ -81,7 +81,7 @@ class EndScreenState extends FlxState {
 		rankTxt.alpha = 0;
 
 		FlxTween.tween(rankTxt, {'scale.x': 1, 'scale.y': 1, alpha: 1}, 1,
-			{ease: n -> Math.pow(n, 10 / 3), startDelay: 1.5, onComplete: t -> FlxG.camera.flash()});
+			{ease: n -> Math.pow(n, 10 / 3), startDelay: 1, onComplete: t -> FlxG.camera.flash()});
 
 		add(judgementTexts);
 
@@ -90,7 +90,7 @@ class EndScreenState extends FlxState {
 		add(continueTxt);
 		continueTxt.alpha = 0;
 
-		FlxTween.tween(continueTxt, {y: FlxG.height - continueTxt.height, alpha: 1}, 1, {ease: FlxEase.expoOut, startDelay: 6, onStart: t -> allowExit = true});
+		FlxTween.tween(continueTxt, {y: FlxG.height - continueTxt.height, alpha: 1}, 1, {ease: FlxEase.expoOut, startDelay: 2, onStart: t -> allowExit = true});
 
 		FlxG.camera.flash(FlxColor.BLACK, 1/3);
     }
