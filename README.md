@@ -1,8 +1,10 @@
 # ManiaDerivative
-
 An alternative to mania??? Not really aiming for that.
 
-Checklist:
+## NOTE
+Currently on hiatus. With my schoolworks up and running, that is.
+
+## Feature checklist
 * [ ] Main menu
   * [ ] Options menu
     * [x] Offset adjustment
